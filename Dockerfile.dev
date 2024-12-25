@@ -1,0 +1,32 @@
+# Alpine is light weight, so we will use that 
+#Each line represents a stage/layer 
+#More stages means more resources are used
+#Dev DockerFile size does not matter as much as prod
+FROM node:21-alpine3.18
+
+#Set the working directory
+WORKDIR /app
+
+#Copy the files to /app directory
+COPY package.json ./
+
+COPY tsconfig.json ./
+
+COPY .npmrc ./
+
+COPY src ./src
+
+COPY tools ./tools
+
+RUN ls -a
+
+#Install the dependencies
+#Executes commands during the image build process
+RUN npm install && npm install -g nodemon
+
+#Expose the port
+EXPOSE 4001
+
+#Start the server
+#Specifies the command to run when the container starts
+CMD ["npm", "run", "dev"]
